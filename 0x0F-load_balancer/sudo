@@ -1,0 +1,2 @@
+# apt-get install --no-install-recommends software-properties-common
+# add-apt-repository ppa:vbernat/haproxy-2.0
