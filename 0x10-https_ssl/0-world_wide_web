@@ -11,5 +11,5 @@ then
     prints "web-02.$1" "web-02"
 elif [ $# -eq 2 ];
 then
-     prints "$2.$1" "$2"
+    prints "$2.$1" "$2"
 fi
