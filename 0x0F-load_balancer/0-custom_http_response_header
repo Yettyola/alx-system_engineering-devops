@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # custom header
 SRC="/etc/nginx/sites-available/default"
-REDIR="\\\tlocation /redirect_me {\n\t\t return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n\t}\n"
+REDIR="\\\tlocation /redirect_me {\n\t\t return 301 https://www.kemten.tech/watch?v=QH2-TGUlwu4;\n\t}\n"
 ERRDIR="\\\n\terror_page 404 /custom_404.html;\n\tlocation = /custom_404.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}\n"
 HEADER="\\\n\tadd_header X-Served-By \$HOSTNAME;\n"
 sudo apt-get -y update
