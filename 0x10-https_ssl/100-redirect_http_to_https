@@ -40,11 +40,18 @@ frontend www-http
         http-request set-header X-Forwarded-Proto http
         default_backend kemten_tech_backend
 
+frontend www-https
+        bind 0.0.0.0:443 ssl crt /etc/haproxy/certs/kemten.tech.pem
+        http-request set-header X-Forwarded-Proto https
+        redirect scheme https code 301 unless { ssl_fc }
+        acl    letsencrypt-acl path_beg /.well-known/acme-challenge/
+        use_backend letsencrypt-backend if letsencrypt-acl
+                                                                                                                                                                              1,6           Top
 backend kemten_tech_backend
         balance roundrobin
         server web-01 18.207.235.235:80 check
         server web-02 3.84.239.13:80 check
-~
-~
--- INSERT --                                                                                                                                                                  1,7           All
+
+backend letsencrypt-backend
+        server letsencrypt 18.207.235.235:80
 
