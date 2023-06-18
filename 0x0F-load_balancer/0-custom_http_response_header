@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 # custom header
-SRC="/etc/nginx/sites-available/default"
-REDIR="\\\tlocation /redirect_me {\n\t\t return 301 https://www.kemten.tech/watch?v=QH2-TGUlwu4;\n\t}\n"
-ERRDIR="\\\n\terror_page 404 /custom_404.html;\n\tlocation = /custom_404.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}\n"
-HEADER="\\\n\tadd_header X-Served-By \$HOSTNAME;\n"
+
 sudo apt-get -y update
 sudo apt-get -y install nginx
-echo "Holberton School" | sudo tee /usr/share/nginx/html/index.html
-sudo sed -i "30i $REDIR" $SRC
-sudo sed -i "28i $HEADER" $SRC
+sudo echo "Hello world" Welcome to my server > /var/www/html/index.html
+
+
 echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/custom_404.html
-sudo sed -i "48i $ERRDIR" $SRC
+# Configuring redirection
+sudo sed -i '/^\sserver_name.*/a \        rewrite ^/redirect_me https://www.kemten.tech  permanent;' /etc/nginx/sites-available/default
+# Custom error page
+sudo sed -i '/^\slocation.*/i \        error_page 404 /custom_404.html;' /etc/nginx/sites-available/default
+# Configuring response header
+sudo sed -i '/^\slocation.*/i \        add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
 sudo service nginx restart
