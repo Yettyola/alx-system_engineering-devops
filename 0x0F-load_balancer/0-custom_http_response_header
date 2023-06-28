@@ -1,16 +1,23 @@
 #!/usr/bin/env bash
-# custom header
+# configures an Ubuntu machine with nginx
+FILE="/etc/nginx/sites-available/default"
+ERRORFILE="/usr/share/nginx/html/404error.html"
 
-sudo apt-get -y update
-sudo apt-get -y install nginx
-sudo echo "Hello world" Welcome to my server > /var/www/html/index.html
+REDIRECT="\n\tlocation /redirect_me {\n\t\treturn 301 https://youtu.be/dQw4w9WgXcQ;\n\t}\n"
+ERRORREDIRECT="\n\terror_page 404 /404error.html;\n\tlocation = /404error.html {\n\t\troot /usr/share/nginx/html;\n\t\tinternal;\n\t}\n"
+CUSTOMHEADER='\n\tadd_header X-Served-By $hostname;\n'
 
+STRING="Hello World!"
+FOUR="Ceci n'est pas une page"
 
-echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/custom_404.html
-# Configuring redirection
-sudo sed -i '/^\sserver_name.*/a \        rewrite ^/redirect_me https://www.kemten.tech  permanent;' /etc/nginx/sites-available/default
-# Custom error page
-sudo sed -i '/^\slocation.*/i \        error_page 404 /custom_404.html;' /etc/nginx/sites-available/default
-# Configuring response header
-sudo sed -i '/^\slocation.*/i \        add_header X-Served-By $hostname;' /etc/nginx/sites-available/default
-sudo service nginx restart
+apt-get -y update
+apt-get -y install nginx
+ufw allow 'Nginx HTTP'
+echo "$STRING" > /var/www/html/index.nginx-debian.html
+sed -i "37i\ $REDIRECT" "$FILE"
+
+echo "$FOUR" > "$ERRORFILE"
+sed -i "37i\ $ERRORREDIRECT" "$FILE"
+
+sed -i "37i\ $CUSTOMHEADER" "$FILE"
+service nginx restart
